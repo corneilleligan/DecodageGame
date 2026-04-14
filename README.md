@@ -20,7 +20,10 @@
 
 <p align="center">
   <img src="screenshot1.png" width="45%" />
-  <img src="screenshot2.png" width="45%" />
+</p>
+
+<p align="center">
+  <img src="screenshot2.png" width="auto%" />
 </p>
 
 <p align="center">
@@ -82,7 +85,7 @@ Ouvre `Decodeur/index.html` directement dans un navigateur — aucune installati
 ## Structure
 
 ```
-Decodeur/
+DecodageGame/
 ├── index.html   # Trois écrans — menu, jeu, résultats
 ├── style.css    # Thème terminal sombre, animations
 └── script.js    # Moteur de jeu, conversions, timer
