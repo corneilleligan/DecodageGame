@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jeu de Décodage</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
+
+<body>
+
+<!-- MENU -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-inner">
+    <div class="logo-wrap anim-0">
+      <div class="logo-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#79c0ff" stroke-width="1.8">
+          <path d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+        </svg>
+      </div>
+      <div class="logo-title">Décodeur</div>
+      <div class="logo-sub">Conversions numériques</div>
+    </div>
+
+    <div class="best-box anim-1">
+      <div>
+        <div class="best-label">Meilleur score</div>
+        <div class="best-score" id="bestScoreDisplay">0</div>
+      </div>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e3b341" stroke-width="1.5">
+        <path d="M8 21h8m-4-4v4M4 7V5h16v2c0 4-2.5 7-8 8C6.5 14 4 11 4 7z"/>
+      </svg>
+    </div>
+
+    <div class="settings-card anim-2">
+      <div>
+        <div class="field-label">Nombre de questions</div>
+        <select id="totalQSelect">
+          <option value="5">5 questions</option>
+          <option value="10" selected>10 questions</option>
+          <option value="15">15 questions</option>
+          <option value="20">20 questions</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Difficulté</div>
+        <select id="difficultySelect">
+          <option value="easy">Facile — 0 à 31</option>
+          <option value="medium" selected>Moyen — 0 à 255</option>
+          <option value="hard">Difficile — 0 à 4095</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-play anim-3" id="startBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      Jouer
+    </button>
+
+    <div class="rules-box anim-4">
+      Convertissez les nombres entre différentes bases — binaire, décimal, hexadécimal — avant la fin du temps. Plus vous répondez vite, plus vous gagnez de points.
+    </div>
+  </div>
+</div>
+
+<!-- PLAYING -->
+<div id="screen-playing" class="screen">
+  <div class="play-header">
+    <div class="hud-pill">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="qProgress">1/10</span>
+    </div>
+    <div class="hud-pill amber">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8m-4-4v4M4 7V5h16v2c0 4-2.5 7-8 8C6.5 14 4 11 4 7z"/></svg>
+      <span id="scoreDisplay">0</span>
+    </div>
+    <div class="hud-pill timer" id="timerPill">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="timerDisplay">60s</span>
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <div class="play-content">
+    <div class="conversion-badge">
+      <span class="badge" id="conversionBadge">Binaire → Décimal</span>
+    </div>
+
+    <div class="number-box">
+      <div class="number-val" id="numberDisplay">10110101</div>
+      <div class="number-hint" id="numberHint">→ convertir en décimal</div>
+    </div>
+
+    <div id="feedbackBox" style="display:none" class="feedback-box"></div>
+
+    <input
+      type="text"
+      id="answerInput"
+      class="answer-input"
+      placeholder="Votre réponse…"
+      autocomplete="off"
+      autocapitalize="characters"
+      spellcheck="false"
+    />
+
+    <button class="btn-submit" id="submitBtn" disabled>Valider — Entrée</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-inner">
+    <div class="anim-0" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;">
+      <div class="results-title">Résultats</div>
+    </div>
+
+    <div class="stats-row anim-1">
+      <div class="stat-card">
+        <div class="stat-val" id="resFinalScore" style="color:var(--amber)">0</div>
+        <div class="stat-lbl">Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="resAccuracy" style="color:var(--cyan)">0%</div>
+        <div class="stat-lbl">Précision</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="resCorrect" style="color:var(--green)">0/0</div>
+        <div class="stat-lbl">Bonnes</div>
+      </div>
+    </div>
+
+    <div id="recordBanner" style="display:none" class="record-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8m-4-4v4M4 7V5h16v2c0 4-2.5 7-8 8C6.5 14 4 11 4 7z"/></svg>
+      Nouveau record !
+    </div>
+
+    <div class="answers-list anim-2" id="answersList"></div>
+
+    <button class="btn btn-menu anim-3" id="backMenuBtn">Menu Principal</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
