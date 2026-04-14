@@ -78,7 +78,7 @@ Plus vous répondez vite, plus vous gagnez de points.
 
 ## Utilisation
 
-Ouvre `Decodeur/index.html` directement dans un navigateur — aucune installation requise.
+Ouvre `DecodageGame/index.html` directement dans un navigateur — aucune installation requise.
 
 ---
 
