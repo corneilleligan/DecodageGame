@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <img src="screenshot1.png" width="500"/>
+  <img src="screenshot3.png" width="500"/>
 </p>
 
 </div>
